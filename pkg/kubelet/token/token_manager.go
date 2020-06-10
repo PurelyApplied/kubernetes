@@ -169,6 +169,15 @@ func (m *Manager) expired(t *authenticationv1.TokenRequest) bool {
 func (m *Manager) requiresRefresh(tr *authenticationv1.TokenRequest) bool {
 	if tr.Spec.ExpirationSeconds == nil {
 		klog.Errorf("expiration seconds was nil for tr: %#v", tr)
+
+		s := tr.String()
+		klog.Errorf("%v", s)
+
+		// fixed by https://github.com/kubernetes/kubernetes/pull/90413
+		// cpy := tr.DeepCopy()
+		// cpy.Status.Token = ""
+		// klog.Errorf("expiration seconds was nil for tr: %#v", cpy)
+
 		return false
 	}
 	now := m.clock.Now()
