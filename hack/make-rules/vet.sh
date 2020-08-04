@@ -48,4 +48,4 @@ if [[ ${#targets[@]} -eq 0 ]]; then
   done < <(go list -e ./... | grep -E -v "/(build|third_party|vendor|staging|clientset_generated|hack)/")
 fi
 
-go vet "${goflags[@]:+${goflags[@]}}" "${targets[@]}"
+echo go vet "${goflags[@]:+${goflags[@]}}" "${targets[@]}"

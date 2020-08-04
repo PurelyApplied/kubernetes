@@ -64,3 +64,4 @@ go_test(
     embed = [":go_default_library"],
     deps = ["//staging/src/k8s.io/component-base/metrics:go_default_library"],
 )
+
