@@ -35,10 +35,10 @@ fi
 
 build_levee () {
   pushd ${KUBE_ROOT} &> /dev/null
-    bazel build //test/instrumentation/levee:levee
+    bazel build //test/instrumentation/levee:levee &> /dev/null
   popd &> /dev/null
 
-  $(find ${BAZEL_OUT_DIR}/test/instrumentation/levee -name levee -type f)
+  find ${BAZEL_OUT_DIR}/test/instrumentation/levee -name levee -type f
 }
 
 # Accept an argument for an alternate test binary, or build locally.
