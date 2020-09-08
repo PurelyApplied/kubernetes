@@ -277,6 +277,7 @@ replace (
 	github.com/google/btree => github.com/google/btree v1.0.0
 	github.com/google/cadvisor => github.com/google/cadvisor v0.37.0
 	github.com/google/go-cmp => github.com/google/go-cmp v0.4.0
+	github.com/google/go-flow-levee => github.com/google/go-flow-levee v0.1.3
 	github.com/google/gofuzz => github.com/google/gofuzz v1.1.0
 	github.com/google/martian => github.com/google/martian v2.1.0+incompatible
 	github.com/google/pprof => github.com/google/pprof v0.0.0-20191218002539-d4f498aebedc

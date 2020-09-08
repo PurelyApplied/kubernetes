@@ -14,15 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This script vets all *.go files by running `go vet`. It is equivalent to
-# `make vet`.
-# Usage: `hack/verify-govet.sh` or `make vet`.
-# Note: This script is a vestigial redirection. Please do not add "real" logic.
+# TODO: This script has evolved to the point of just being a wrapper for `make vet`.
+# It might be cleaner to simply invoke `make vet -vettool=...` or `hack/verify-govet.sh` with arguments directly.
+# It has also iterated to a point that it that it doesn't really belong in //test/instrumentation anymore.
+
+# This script vets all *.go files by running `go vet -vettool=levee`.
+# It is equivalent to `make vet` with appropraite flags.
+# Usage: `test/instrumentation/levee/verify-govet-levee.sh`.
 
 set -o errexit
 set -o pipefail
 
-KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/../../../
+KUBE_ROOT=$(dirname $(realpath "${BASH_SOURCE[0]}"))/../../../
 BAZEL_OUT_DIR="$KUBE_ROOT/bazel-bin"
 
 # Warn future developers against trying to link this into an sh_test
@@ -30,11 +33,16 @@ if [ -e "${TEST_BINARY}" ]; then
   echo "Due to requiring build environment and artifacts, vet must be run via make, not Bazel."
 fi
 
-pushd ${KUBE_ROOT}
-  bazel build //test/instrumentation/levee:levee
-popd
+build_levee () {
+  pushd ${KUBE_ROOT} &> /dev/null
+    bazel build //test/instrumentation/levee:levee
+  popd &> /dev/null
 
-LEVEE_BIN=$(find ${BAZEL_OUT_DIR}/test/instrumentation/levee -name levee -type f)
+  $(find ${BAZEL_OUT_DIR}/test/instrumentation/levee -name levee -type f)
+}
+
+# Accept an argument for an alternate test binary, or build locally.
+LEVEE_BIN=${1:-$(build_levee)}
 CONFIG_FILE=${KUBE_ROOT}/test/instrumentation/levee/testdata/levee-config.json
 
 # make vet runs on all packages when no targets are provided
